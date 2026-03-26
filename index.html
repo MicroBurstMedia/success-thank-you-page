@@ -3,46 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download Your Guide | MBMN</title>
+    <title>MicroBurstMedia | Thank You Page</title>
     <style>
         :root {
             --bg-dark: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-card: rgba(30, 41, 59, 0.8);
             --primary: #3b82f6; 
             --accent: #8b5cf6; 
             --text-main: #f8fafc;
+            --text-muted: #94a3b8;
             --success: #10b981;
         }
 
+        /* Centering the entire card on the screen */
         body { 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            padding: 20px;
         }
 
         .glass-card {
             background: var(--bg-card);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 40px;
             border-radius: 24px;
             max-width: 450px;
+            width: 100%;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
+        /* Fixed image alignment and sizing */
         .product-preview {
-            width: 100%;
-            max-width: 200px;
+            width: 180px;
+            height: auto;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin: 0 auto 25px auto;
+            display: block;
             border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
         .btn {
@@ -52,50 +59,64 @@
             border-radius: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             text-decoration: none;
             background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
             border: none;
             font-size: 1rem;
+            box-sizing: border-box; /* Ensures padding doesn't break width */
         }
 
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+        .btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); 
+        }
 
+        /* Aligned redirect message */
         #redirect-container {
-            margin-top: 25px;
+            margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            display: none; /* Hidden until download clicked */
-            animation: fadeIn 0.5s ease;
+            display: none; /* Triggered by JS */
+            animation: slideUp 0.4s ease-out forwards;
         }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
-        #count { color: var(--primary); font-weight: bold; }
+        #count { color: var(--primary); font-weight: 800; }
+        .status-badge { color: var(--success); font-weight: 700; margin-bottom: 10px; display: block; }
     </style>
 </head>
 <body>
 
     <div class="glass-card">
-        <h2 style="color: var(--success); margin-bottom: 15px;">Purchase Order Successful!</h2>
+        <span class="status-badge">✓ PURCHASE ORDER SUCCESSFUL!</span>
+        <h2 style="margin-bottom: 20px;">Acquire Your Digital Guide Copy</h2>
         
         <img src="https://i.pinimg.com/736x/1c/e8/50/1ce850cf15d9a1e7d87fd259f0b3373c.jpg" 
              alt="AI Automation Guide" 
              class="product-preview">
 
-        <p style="margin-bottom: 25px; color: #94a3b8;">MicroBurstMedia wishes to thank you for purchasing the Beginners Guidebook on AI Automation. To access, please click on the "Download Guide" button.</p>
+        <p style="margin-bottom: 30px; color: var(--text-muted); font-size: 0.95rem;">
+            MicroBurstMedia wishes to thank you for purchasing the Beginners Guidebook on AI Automation. To access, please click on the "Access E-Book" button below.
+        </p>
         
         <a href="https://drive.google.com/file/d/13hrWCkUDUIKjNpSZrUEEymGB7x-6lR5h/view?usp=sharing" 
            id="download-trigger" 
            class="btn" 
-           download="AI_Automation_Setup_Systems.pdf">
-            Download Guide
+           target="_blank">
+            Access E-Book
         </a>
 
         <div id="redirect-container">
-            <p>Download started! Redirecting back to the Network in <span id="count">7</span>s...</p>
+            <p style="font-size: 0.9rem;">
+                Redirecting back to the Marketing Network in <span id="count">7</span>s...
+            </p>
         </div>
     </div>
 
@@ -106,14 +127,14 @@
         const homeUrl = "https://microburstmedia.github.io/digital-marketing-network/";
 
         downloadBtn.onclick = function() {
-            // 1. Show the redirect message
+            // Show the redirect message immediately on click
             redirectBox.style.display = 'block';
             
-            // 2. Start the timer
             let timeLeft = 7;
             const timer = setInterval(() => {
                 timeLeft--;
                 countDisplay.innerText = timeLeft;
+                
                 if (timeLeft <= 0) {
                     clearInterval(timer);
                     window.location.href = homeUrl;
