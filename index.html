@@ -3,104 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You | MicroBurstMedia</title>
+    <title>Success | MicroBurstMedia</title>
     <style>
         :root {
             --bg-dark: #0f172a;
-            --primary: #3b82f6;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --primary: #3b82f6; 
+            --accent: #8b5cf6; 
             --text-main: #f8fafc;
-            --accent: #8b5cf6;
+            --success: #10b981;
         }
+
         body { 
             background-color: var(--bg-dark); 
             color: var(--text-main); 
-            font-family: 'Segoe UI', sans-serif; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
-            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
         }
-        .container { 
-            padding: 40px; 
-            background: rgba(30, 41, 59, 0.6); 
-            border-radius: 24px; 
-            border: 1px solid var(--accent);
+
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 24px;
             max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
-        .icon-circle {
-            width: 80px; height: 80px;
-            background: var(--primary);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
-        }
-        h1 { font-size: 2rem; margin-bottom: 10px; }
-        p { color: #94a3b8; line-height: 1.6; }
-        .loader {
-            margin: 20px auto;
-            border: 4px solid rgba(255,255,255,0.1);
-            border-left-color: var(--primary);
-            border-radius: 50%;
-            width: 30px; height: 30px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .btn-manual {
-            color: var(--primary);
-            text-decoration: underline;
+
+        .btn {
+            display: inline-block;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s;
             cursor: pointer;
-            display: block;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            border: none;
             margin-top: 20px;
         }
+
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.4); }
+
+        #timer-msg { margin-top: 25px; font-size: 0.9rem; color: #94a3b8; }
+        #count { color: var(--primary); font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="icon-circle">✓</div>
-    <h1>Payment Successful!</h1>
-    <p>Thank you for acquiring the <strong>AI Automation Setup Systems™ E-Book</strong>.</p>
-    
-    <div id="status-area">
-        <div class="loader"></div>
-        <p>Your download is starting automatically...</p>
+    <div class="glass-card">
+        <h1 style="color: var(--success); margin-bottom: 10px;">Payment Verified</h1>
+        <p>Your AI Automation Setup Systems™ E-Book is downloading...</p>
+        
+        <a href="https://drive.google.com/file/d/13hrWCkUDUIKjNpSZrUEEymGB7x-6lR5h/view?usp=sharing" id="manual-download" class="btn" download>
+            Download Manually
+        </a>
+
+        <p id="timer-msg">Returning to the Network in <span id="count">8</span> seconds...</p>
     </div>
 
-    <p style="font-size: 0.8rem; margin-top: 30px;">
-        Redirecting you to the home page in <span id="timer">7</span> seconds.
-    </p>
-    
-    <a href="https://drive.google.com/file/d/13hrWCkUDUIKjNpSZrUEEymGB7x-6lR5h/view?usp=sharing" class="btn-manual">Click here if download doesn't start</a>
-</div>
+    <script>
+        window.onload = function() {
+            const downloadUrl = "https://drive.google.com/file/d/13hrWCkUDUIKjNpSZrUEEymGB7x-6lR5h/view?usp=sharing";
+            const homeUrl = "https://microburstmedia.github.io/digital-marketing-network/";
 
-<script>
-    // 1. Trigger the Automatic Download
-    window.onload = function() {
-        const fileUrl = 'https://drive.google.com/file/d/13hrWCkUDUIKjNpSZrUEEymGB7x-6lR5h/view?usp=sharing'; // Paste your PDF link here
-        const link = document.createElement('a');
-        link.href = fileUrl;
-        link.download = 'MicroBurstMedia_AI_Automation_Guide.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+            // 1. Attempt Automatic Download
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = 'AI_Automation_Setup_Systems.pdf';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-        // 2. Countdown and Redirect
-        let timeLeft = 7;
-        const timerElement = document.getElementById('timer');
-        
-        const countdown = setInterval(() => {
-            timeLeft -= 1;
-            timerElement.innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(countdown);
-                window.location.href = 'https://microburstmedia.github.io/digital-marketing-network/';
-            }
-        }, 1000);
-    };
-</script>
+            // 2. Countdown and Redirect
+            let timeLeft = 12;
+            const countDisplay = document.getElementById('count');
+            
+            const timer = setInterval(() => {
+                timeLeft--;
+                countDisplay.innerText = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    window.location.href = homeUrl;
+                }
+            }, 1000);
 
+            // 3. If they click manually, speed up the redirect
+            document.getElementById('manual-download').onclick = function() {
+                setTimeout(() => { window.location.href = homeUrl; }, 2000);
+            };
+        };
+    </script>
 </body>
 </html>
